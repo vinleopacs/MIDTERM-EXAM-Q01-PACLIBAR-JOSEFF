@@ -1,8 +1,8 @@
 # Lost and Found System
 
-Midterm Exam - Integrative Programming (Q01)
+Midterm Exam - Integ Programming (Q01)
 
-This is a Lost and Found Management System for items found around campus. The API is made with Node.js and Express, and the page uses fetch() to talk to it. All the items are saved in data.json.
+Lost and Found Management System for items found around campus. The API is made with Node.js and Express, and the page uses fetch() to talk to it. All the items are saved in data.json.
 
 ## Files
 
@@ -64,7 +64,7 @@ The page uses fetch() to call the API.
 - A claimed item cannot be deleted.
 - Trying to delete a claimed item returns an error and does not change data.json.
 - Items are displayed as either CLAIMED or UNCLAIMED.
-- The starting data.json has one claimed item and two unclaimed items.
+- The starting data.json already has atleast 2 claimed item and 3 unclaimed items.
 - Only insert, retrieve and delete are done. There is no update, put or patch.
 
 ## Status codes used
