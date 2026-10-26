@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Lost & Found System</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 0 10px; }
+    fieldset { margin-bottom: 15px; }
+    input { margin: 3px; padding: 5px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #999999; padding: 6px; text-align: left; }
+    .CLAIMED { color: green; font-weight: bold; }
+    .UNCLAIMED { color: rgb(255, 94, 0); font-weight: bold; }
+    #message { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Lost & Found System</h1>
+  <p id="message"></p>
+
+  <fieldset>
+    <legend>Add Item</legend>
+    <input id="item_name" placeholder="Item name">
+    <input id="category" placeholder="Category">
+    <input id="location_found" placeholder="Location found">
+    <input id="date_found" type="date">
+    <button onclick="addItem()">Add</button>
+  </fieldset>
+
+  <fieldset>
+    <legend>Search by ID</legend>
+    <input id="searchId" type="number" placeholder="Item ID">
+    <button onclick="searchItem()">Search</button>
+    <button onclick="loadItems()">Show All</button>
+  </fieldset>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th><th>Item Name</th><th>Category</th>
+        <th>Location Found</th><th>Date Found</th><th>Status</th><th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="itemTable"></tbody>
+  </table>
+
+  <script>
+    const API = "/api/items";
+
+    function showMessage(text) {
+      document.getElementById("message").textContent = text;
+    }
+
+    function showItems(items) {
+      const table = document.getElementById("itemTable");
+      table.innerHTML = "";
+      items.forEach((item) => {
+        const status = item.claimed ? "CLAIMED" : "UNCLAIMED";
+        const row = table.insertRow();
+        row.insertCell().textContent = item.id;
+        row.insertCell().textContent = item.item_name;
+        row.insertCell().textContent = item.category;
+        row.insertCell().textContent = item.location_found;
+        row.insertCell().textContent = item.date_found;
+
+        const statusCell = row.insertCell();
+        statusCell.textContent = status;
+        statusCell.className = status;
+
+        const btn = document.createElement("button");
+        btn.textContent = "Delete";
+        btn.onclick = () => deleteItem(item.id);
+        row.insertCell().appendChild(btn);
+      });
+    }
+
+    async function loadItems() {
+      showMessage("");
+      const res = await fetch(API);
+      showItems(await res.json());
+    }
+
+    async function searchItem() {
+      const id = document.getElementById("searchId").value;
+      const res = await fetch(API + "/" + id);
+      const data = await res.json();
+      if (!res.ok) {
+        showMessage(data.error);
+        return;
+      }
+      showMessage("");
+      showItems([data]);
+    }
+
+    async function addItem() {
+      const body = {
+        item_name: document.getElementById("item_name").value,
+        category: document.getElementById("category").value,
+        location_found: document.getElementById("location_found").value,
+        date_found: document.getElementById("date_found").value
+      };
+      const res = await fetch(API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showMessage(data.error);
+        return;
+      }
+      document.querySelectorAll("fieldset input").forEach((i) => (i.value = ""));
+      loadItems();
+    }
+
+    async function deleteItem(id) {
+      const res = await fetch(API + "/" + id, { method: "DELETE" });
+      const data = await res.json();
+      if (!res.ok) {
+        showMessage(data.error);
+        return;
+      }
+      loadItems();
+    }
+
+    loadItems();
+  </script>
+</body>
+</html>
