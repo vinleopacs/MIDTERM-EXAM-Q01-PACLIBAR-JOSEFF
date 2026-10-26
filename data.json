@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "item_name": "Black Cleats",
+    "category": "Footwear",
+    "location_found": "TC Stadium",
+    "date_found": "2026-10-19",
+    "claimed": true
+  },
+  {
+    "id": 2,
+    "item_name": "SAS Majesties Jersey",
+    "category": "Clothing",
+    "location_found": "PE24TC, PE Building",
+    "date_found": "2026-10-20",
+    "claimed": false
+  },
+  {
+    "id": 3,
+    "item_name": "Student ID \"21523027\"",
+    "category": "ID Card",
+    "location_found": "Bunzel Canteen",
+    "date_found": "2026-10-24",
+    "claimed": false
+  },
+  {
+    "id": 4,
+    "item_name": "Wallet",
+    "category": "Personal Item",
+    "location_found": "Near Portal 2",
+    "date_found": "2026-10-15",
+    "claimed": false
+  },
+  {
+    "id": 5,
+    "item_name": "Iphone 17 Pro Max",
+    "category": "Phone",
+    "location_found": "LB448TC",
+    "date_found": "2026-10-26",
+    "claimed": true
+  }
+]
