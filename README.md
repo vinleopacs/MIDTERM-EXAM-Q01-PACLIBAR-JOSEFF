@@ -1,60 +1,76 @@
-Lost and Found System Midterm - Integrative Programming
+# Lost and Found System
 
-Lost and found system for items found around campus, the API is made with Node.js and Express, and the page uses fetch() to talk to it. The items are saved in data.json.
+Midterm Exam - Integrative Programming (Q01)
 
-Files: server.js - the server and the API routes data.json - where the items are saved public/index.html - the page for viewing, searching, adding and deleting items package.json - the packages needed (express)
+This is a Lost and Found Management System for items found around campus. The API is made with Node.js and Express, and the page uses fetch() to talk to it. All the items are saved in data.json.
 
-To run: npm install node server.js Then open http://localhost:3000
+## Files
 
-API routes: GET /api/items - get all items GET /api/items/:id - get one item by id POST /api/items - add a new item DELETE /api/items/:id - delete an item by id
+- server.js - the server and the API routes
+- data.json - where the items are saved
+- public/index.html - the page for viewing, searching, adding and deleting items
+- package.json - the packages needed (express)
 
-Item fields: id, item_name, category, location_found, date_found, claimed
+## To run
 
+1. Open the terminal inside the project folder
+2. Run `npm install`
+3. Run `node server.js`
+4. Open http://localhost:3000 in the browser
 
+## Item fields
 
-When an item is added, claimed is always set to false by the server. The user cannot enter it.
-A claimed item cannot be deleted. It returns an error (403) and data.json is not changed.
-Items are shown as CLAIMED or UNCLAIMED.
-data.json starts with one claimed item and two unclaimed items.
-There is no update, put or patch.
+Each item has these fields:
 
-Instructions: Lost & Found System
-Create a Lost & Found Management System for items found around a campus.
+- id
+- item_name
+- category
+- location_found
+- date_found
+- claimed
 
-Data Fields
-Each item must contain:
+## API routes
 
-id
+- GET /api/items - get all items
+- GET /api/items/:id - get one item by id
+- POST /api/items - add a new item
+- DELETE /api/items/:id - delete an item by id
 
-item_name
+## How the code works
 
-category
+**server.js**
 
-location_found
+The server reads data.json every time a request comes in, and writes back to it when an item is added or deleted. This way the file always has the latest items.
 
-date_found
+- GET /api/items sends back all the items (200).
+- GET /api/items/:id looks for the item with that id. If it is not found, it sends an error (404).
+- POST /api/items takes item_name, category, location_found and date_found from the request. If any of them is missing, it sends an error (400). The id is the highest id plus one, and `claimed` is always set to false by the server, so the user cannot enter it. The new item is saved and sent back (201).
+- DELETE /api/items/:id looks for the item first (404 if not found). If the item is claimed, it sends an error (403) and stops before saving, so data.json is not changed. If it is not claimed, it is removed and the file is saved (200).
 
-claimed
+**public/index.html**
 
-Requirements
-When a new item is added, claimed must automatically be set to false.
+The page uses fetch() to call the API.
 
-The user must not enter the claimed value when adding an item.
+- It loads all the items when the page opens.
+- The Search button gets one item by id.
+- The Add button sends the form to the API. There is no claimed input in the form.
+- The Delete button deletes an item. If the API sends an error, the message is shown in red.
+- Each item is shown as CLAIMED or UNCLAIMED depending on its claimed value.
 
-A claimed item cannot be deleted.
+## Instructions from the exam
 
-Attempting to delete a claimed item must return an error and must not modify json data.
+- When a new item is added, claimed is automatically set to false.
+- The user must not enter the claimed value when adding an item.
+- A claimed item cannot be deleted.
+- Trying to delete a claimed item returns an error and does not change data.json.
+- Items are displayed as either CLAIMED or UNCLAIMED.
+- The starting data.json has one claimed item and two unclaimed items.
+- Only insert, retrieve and delete are done. There is no update, put or patch.
 
-Display items as either CLAIMED or UNCLAIMED.
+## Status codes used
 
-Your initial json must contain at least:
-
-one claimed item
-
-one unclaimed item
-
-Required API
-GET    /api/items
-GET    /api/items/:id
-POST   /api/items
-DELETE /api/items/:id
+- 200 - ok
+- 201 - item added
+- 400 - missing fields
+- 403 - tried to delete a claimed item
+- 404 - item not found
